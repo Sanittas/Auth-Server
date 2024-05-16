@@ -41,12 +41,6 @@ public class SecurityConfigurer implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://3.228.35.151:8080")
                 .allowedMethods("GET", "POST", "PUT", "DELETE");
-        registry.addMapping("/**")
-                .allowedOrigins("http://10.0.0.4:8080")
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
 }
