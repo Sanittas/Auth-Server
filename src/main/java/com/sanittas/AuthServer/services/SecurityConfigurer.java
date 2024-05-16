@@ -40,7 +40,7 @@ public class SecurityConfigurer implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://3.228.35.151:8080")
-                .allowedMethods("GET", "POST", "PUT", "DELETE");
+                .allowedMethods("*");
     }
 
 }
