@@ -39,8 +39,10 @@ public class SecurityConfigurer implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://3.228.35.151:8080")
-                .allowedMethods("*");
+                .allowedOrigins("http://3.228.35.151")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("Content-Type", "Authorization")
+                .allowCredentials(true);
     }
 
 }
