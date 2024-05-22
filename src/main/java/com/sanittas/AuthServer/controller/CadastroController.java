@@ -1,6 +1,5 @@
 package com.sanittas.AuthServer.controller;
 
-import com.sanittas.AuthServer.domain.Usuario;
 import com.sanittas.AuthServer.services.EmpresaService;
 import com.sanittas.AuthServer.services.UsuarioService;
 import jakarta.validation.Valid;
@@ -19,7 +18,7 @@ public class CadastroController {
     private final EmpresaService empresaService;
 
     @PostMapping("/empresa/")
-    public ResponseEntity<LoginDtoResponse> cadastroEmpresa(@RequestBody @Valid EmpresaCriacaoDto empresa) {
+    public ResponseEntity<LoginDtoResponseUsuario> cadastroEmpresa(@RequestBody @Valid EmpresaCriacaoDto empresa) {
         try {
             log.info("Recebida solicitação para cadastrar uma nova empresa: {}", empresa.razaoSocial());
             empresaService.cadastrar(empresa);
