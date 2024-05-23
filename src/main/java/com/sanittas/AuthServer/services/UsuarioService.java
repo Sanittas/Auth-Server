@@ -1,7 +1,7 @@
 package com.sanittas.AuthServer.services;
 
 import com.sanittas.AuthServer.controller.LoginDtoRequest;
-import com.sanittas.AuthServer.controller.LoginDtoResponse;
+import com.sanittas.AuthServer.controller.LoginDtoResponseUsuario;
 import com.sanittas.AuthServer.controller.UsuarioCriacaoDto;
 import com.sanittas.AuthServer.domain.Usuario;
 import com.sanittas.AuthServer.domain.UsuarioRepository;
@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,14 +23,14 @@ public class UsuarioService {
     private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginDtoResponse login(LoginDtoRequest loginDto) {
+    public LoginDtoResponseUsuario login(LoginDtoRequest loginDto) {
         Usuario usuario = repository.findByEmail(loginDto.username()).orElseThrow( () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não encontrado"));
         if (!passwordEncoder.matches(loginDto.password(), usuario.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha incorreta");
         }
         Date expiryDate = new Date(System.currentTimeMillis() +7200000);
         String token = AuthService.generateToken(usuario, expiryDate);
-        return new LoginDtoResponse(usuario.getId(), usuario.getUsername(), token);
+        return new LoginDtoResponseUsuario(usuario.getId(), usuario.getNome(), usuario.getUsername(), token, usuario.getCpf(), usuario.getTelefone());
     }
 
     public Usuario cadastrar(UsuarioCriacaoDto usuarioCriacaoDto) {

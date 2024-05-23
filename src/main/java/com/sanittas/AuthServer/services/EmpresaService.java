@@ -2,7 +2,8 @@ package com.sanittas.AuthServer.services;
 
 import com.sanittas.AuthServer.controller.EmpresaCriacaoDto;
 import com.sanittas.AuthServer.controller.LoginDtoRequest;
-import com.sanittas.AuthServer.controller.LoginDtoResponse;
+import com.sanittas.AuthServer.controller.LoginDtoResponseEmpresa;
+import com.sanittas.AuthServer.controller.LoginDtoResponseUsuario;
 import com.sanittas.AuthServer.domain.Empresa;
 import com.sanittas.AuthServer.domain.EmpresaRepository;
 import lombok.AllArgsConstructor;
@@ -23,14 +24,14 @@ public class EmpresaService {
     private final EmpresaRepository repository;
     private final PasswordEncoder passwordEncoder;
 
-    public LoginDtoResponse login(LoginDtoRequest loginDto) {
+    public LoginDtoResponseEmpresa login(LoginDtoRequest loginDto) {
         Empresa empresa = repository.findByCnpj(loginDto.username()).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não encontrado"));
         if (!passwordEncoder.matches(loginDto.password(), empresa.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Senha incorreta");
         }
         Date expiryDate = new Date(System.currentTimeMillis() +7200000);
         String token = AuthService.generateToken(empresa, expiryDate);
-        return new LoginDtoResponse(empresa.getId(), empresa.getUsername(), token);
+        return new LoginDtoResponseEmpresa(empresa.getId(), empresa.getRazaoSocial(), empresa.getUsername(), token);
 
     }
 
