@@ -35,7 +35,7 @@ public class EmpresaService {
 
     }
 
-    public void cadastrar(EmpresaCriacaoDto empresa) {
+    public Empresa cadastrar(EmpresaCriacaoDto empresa) {
         if (repository.existsByRazaoSocial(empresa.razaoSocial())) {
             log.error("Razão social já cadastrada");
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Razão social já cadastrada");
@@ -54,8 +54,7 @@ public class EmpresaService {
         empresaNova.setCnpj(empresa.cnpj());
         empresaNova.setEmail(empresa.email());
         empresaNova.setSenha(passwordEncoder.encode(empresa.senha()));
-        repository.save(empresaNova);
-        log.info("Empresa cadastrada com sucesso.");
+        return repository.save(empresaNova);
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

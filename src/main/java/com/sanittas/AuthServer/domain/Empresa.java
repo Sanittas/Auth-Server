@@ -32,7 +32,7 @@ public class Empresa implements UserDetails {
     private String cnpj;
     @Email @Column(unique = true)
     private String email;
-    @NotBlank @Size(min = 8)
+    @NotBlank @Size(min = 8) @JsonIgnore
     private String senha;
     @JsonManagedReference
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -50,7 +50,7 @@ public class Empresa implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority("empresa"));
     }
 
-    @Override
+    @Override @JsonIgnore
     public String getPassword() {
         return senha;
     }

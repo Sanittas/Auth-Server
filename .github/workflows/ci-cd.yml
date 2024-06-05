@@ -16,8 +16,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - name: Build with maven
-        run: mvn -B package --file pom.xml
+      - name: Teste com maven
+        run: mvn clean test -Ptest
+      - name: Build com maven
+        run: mvn clean package -Pprod
       - name: Build the docker image
         run: docker build -t ogabrielsantoos/backend:auth-server .
       - name: Log in docker hub
@@ -27,3 +29,15 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: push no docker hub
         run: docker push ogabrielsantoos/backend:auth-server
+  deploy:
+    needs: build
+    runs-on: [ self-hosted, auth-server ]
+    steps:
+      - name: Pull Docker image
+        run: docker pull ogabrielsantoos/backend:auth-server
+      - name: Stop Docker Container
+        run: docker stop auth-server || true
+      - name: Remover container
+        run: docker rm auth-server || true
+      - name: Run Docker Container
+        run: docker run --name auth-server -d -p 8080:8080 ogabrielsantoos/backend:auth-server
